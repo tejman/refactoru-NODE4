@@ -19,9 +19,33 @@ var stops = [
 
 var locModel = module.exports = {
   findName: function(locName){
-    return filter(stops,function(item){
+
+    var matchArray = filter(stops,function(item){
       return(item.name === locName);
     });
+
+    var nextStopIndex = stops.indexOf(matchArray[0])+1;
+
+    if (nextStopIndex===0) {
+      var notFound = {
+        name: "We did not find a page for "+locName,
+        desc: "Magellan never stopped in "+locName,
+        year: "Never",
+      };
+      matchArray.push(notFound);
+      return matchArray;
+    }
+    else if (nextStopIndex===6) {
+      nextStopIndex = 0;
+      matchArray.push(stops[nextStopIndex]);
+      return matchArray;
+    }
+    else{
+      matchArray.push(stops[nextStopIndex]);
+      return matchArray;
+    };
+
   }
 }
+
 
