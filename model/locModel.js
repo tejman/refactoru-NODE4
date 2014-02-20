@@ -17,35 +17,64 @@ var stops = [
   {name: "Philippines", year: "1530", desc: "here is Philippines"},
   ]
 
+
+
 var locModel = module.exports = {
   findName: function(locName){
-
     var matchArray = filter(stops,function(item){
-      return(item.name === locName);
+      return(item.name.toLowerCase() === locName.toLowerCase());
     });
 
-    var nextStopIndex = stops.indexOf(matchArray[0])+1;
-
-    if (nextStopIndex===0) {
+    if (matchArray.length===0) {
       var notFound = {
         name: "We did not find a page for "+locName,
         desc: "Magellan never stopped in "+locName,
         year: "Never",
       };
-      matchArray.push(notFound);
-      return matchArray;
+      return(notFound);
+    }
+    else{
+      return matchArray[0];
+    }
+  },
+
+  findNext: function(locName){
+
+    var nextStopIndex = stops.indexOf(this.findName(locName))+1;
+
+    if (nextStopIndex===0) {
+      return;
     }
     else if (nextStopIndex===6) {
       nextStopIndex = 0;
-      matchArray.push(stops[nextStopIndex]);
-      return matchArray;
+      return(stops[nextStopIndex]);
     }
     else{
-      matchArray.push(stops[nextStopIndex]);
-      return matchArray;
+      return(stops[nextStopIndex]);
     };
+  },
 
+  findPrev: function(locName){
+
+    var prevStopIndex = stops.indexOf(this.findName(locName))-1;
+
+    if (prevStopIndex===-2) {
+      return;
+    }
+    else if (prevStopIndex===-1) {
+      prevStopIndex = 5;
+      return(stops[prevStopIndex]);
+    }
+    else{
+      return(stops[prevStopIndex]);
+    };
+  },
+
+  JSONobject: function(obj1, obj2){
+    var newObject = {};
+    newObject.location = obj1.name;
+    newObject.nextlocation = obj2.name;
+    return newObject
   }
-}
-
+};
 
